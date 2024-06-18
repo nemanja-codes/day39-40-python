@@ -1,7 +1,8 @@
 import requests
 
 BEARER_TOKEN = "kdfjsklapo1kjis02js%jsi12"
-SHEET_ENDPOINT = "https://api.sheety.co/643dccdcddb0204a103d7f46ce9f9a94/flightDeals/prices"
+PRICES_ENDPOINT = "https://api.sheety.co/643dccdcddb0204a103d7f46ce9f9a94/flightDeals/prices"
+USERS_ENDPOINT = "https://api.sheety.co/643dccdcddb0204a103d7f46ce9f9a94/flightDeals/users"
 
 headers = {
     "Authorization": f"Bearer {BEARER_TOKEN}"
@@ -12,9 +13,10 @@ class DataManager:
     # This class is responsible for talking to the Google Sheet.
     def __init__(self):
         self.destination_data = {}
+        self.customers_emails = []
 
     def get_destination_data(self):
-        response = requests.get(url=SHEET_ENDPOINT, headers=headers)
+        response = requests.get(url=PRICES_ENDPOINT, headers=headers)
         data = response.json()
         self.destination_data = data["prices"]
         return self.destination_data
@@ -27,7 +29,14 @@ class DataManager:
                 }
             }
             response = requests.put(
-                url=f"{SHEET_ENDPOINT}/{city["id"]}",
+                url=f"{PRICES_ENDPOINT}/{city["id"]}",
                 json=new_data,
                 headers=headers
             )
+
+    def get_customer_email(self):
+        response = requests.get(url=USERS_ENDPOINT, headers=headers)
+        data = response.json()
+        for customer in data["users"]:
+            self.customers_emails.append(customer["whatIsYourEmail?"])
+        return self.customers_emails

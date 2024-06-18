@@ -67,3 +67,6 @@ for destination in sheet_data:
         )
         cheapest_flight = find_cheapest_flight(stopover_flights)
         print(f"Cheapest indirect flight price is: £{cheapest_flight.price}")
+
+customer_emails = data_manager.get_customer_email()
+# print(customer_emails)
