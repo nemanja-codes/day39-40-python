@@ -47,7 +47,7 @@ class FlightSearch:
         response.raise_for_status()
         return response.json()['access_token']
 
-    def check_flights(self, origin_city_code, destination_city_code, from_time, to_time):
+    def check_flights(self, origin_city_code, destination_city_code, from_time, to_time, is_direct=True):
         header = {
             'Authorization': f'Bearer {self._token}'
         }
@@ -56,7 +56,7 @@ class FlightSearch:
             'originLocationCode': origin_city_code,
             'destinationLocationCode': destination_city_code,
             'adults': "1",
-            'nonStop': "true",
+            'nonStop': "true" if is_direct else "false",
             'departureDate': from_time.strftime("%Y-%m-%d"),
             'returnDate': to_time.strftime("%Y-%m-%d"),
             'currencyCode': 'GBP',
